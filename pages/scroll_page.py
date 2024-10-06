@@ -2,18 +2,28 @@ from selenium.webdriver.common.by import By
 from bs4 import BeautifulSoup
 from .base_page import BasePage
 from elements.label import Label
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 
 class ScrollPage(BasePage):
+    UNIQUE_ELEMENT = (By.XPATH, '//div[contains(@class, "example")]')
     PARAGRAPH = "(//div[contains(@class, 'jscroll-added')])[{}]"
+
+    def __init__(self, driver):
+        unique_element = Label(driver, self.UNIQUE_ELEMENT)
+        super().__init__(driver, unique_element)
 
     def get_all_paragraphs(self):
         self.logger.info("Получение всех параграфов на странице")
-        page_source = self.driver.get_page_source()
-        soup = BeautifulSoup(page_source, 'html.parser')
+        inner_html = self.driver.execute_script(f'return document.querySelector("div.scroll").innerHTML;')
+        soup = BeautifulSoup(inner_html, 'html.parser')
         paragraphs = soup.find_all('div', class_='jscroll-added')
         self.logger.info(f"Найдено {len(paragraphs)} параграфов")
+        
         return paragraphs
+
+
 
     def scroll_to_paragraph_count(self, target_count):
         self.logger.info(f"Начало прокрутки до {target_count} параграфов")

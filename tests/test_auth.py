@@ -1,18 +1,19 @@
+import os
 from pages.auth_page import AuthPage
 from utils.logger import Logger 
+from utils.config import AUTH_URL
 
 
 class TestBasicAuth:
-    URL = "https://{}:{}@the-internet.herokuapp.com/basic_auth"
-    LOGIN = "admin"
-    PASS = "admin"
+    LOGIN = os.getenv("LOGIN")
+    PASS = os.getenv("PASS")
     EXPECTED_AUTH_TEXT = "Congratulations! You must have the proper credentials."
+    logger = Logger.setup_logger()
 
 
     def test_basic_auth(self, browser):
-        self.logger = Logger.setup_logger(name='test_basic_auth')
         self.logger.info("Запуск теста авторизации")
-        browser.get(self.URL.format(self.LOGIN, self.PASS))
+        browser.get(AUTH_URL.format(self.LOGIN, self.PASS))
 
         self.auth_page = AuthPage(browser)
         self.auth_page.wait_for_open()

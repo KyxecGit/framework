@@ -1,16 +1,16 @@
 from pages.handler_page import HandlerPage
 from utils.logger import Logger  
+from utils.config import HANDLER_URL
 
 
 class TestWindowHandler:
-    URL = "https://the-internet.herokuapp.com/windows"
     NEW_WINDOW_TITLE = "New Window"
+    logger = Logger.setup_logger()
 
 
     def test_open_new_window(self, browser):
-        self.logger = Logger.setup_logger(name='test_window_handler')
         self.logger.info("Запуск теста открытия нового окна")
-        browser.get(self.URL)
+        browser.get(HANDLER_URL)
 
         self.handlers_page = HandlerPage(browser)
         self.handlers_page.wait_for_open()

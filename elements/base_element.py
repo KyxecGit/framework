@@ -1,6 +1,7 @@
 from selenium.webdriver import ActionChains
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.by import By
 from utils.logger import Logger
 
 
@@ -11,13 +12,20 @@ class BaseElement:
         self.description = description
         self.wait = WebDriverWait(self.driver, 10)
         self.action_chains = ActionChains(self.driver)
-        self.logger = Logger.setup_logger(name='element')
+        self.logger = Logger.setup_logger()
+        if isinstance(locator, str):
+            if "/" in locator:
+                self.locator = (By.XPATH, locator)
+            else:
+                self.locator = (By.ID, locator)
+        else:
+            self.locator = locator
 
     def get_presence_of_element_located(self):
         self.logger.info(f"{self.description}: ожидание присутствия элемента")
         return self.wait.until(EC.presence_of_element_located(self.locator))
     
-    def visibility_located(self):
+    def get_visibility_located(self):
         self.logger.info(f"Ожидание видимости элемента с локатором: {self.locator}")
         return self.wait.until(EC.visibility_of_element_located(self.locator))
 
@@ -37,7 +45,7 @@ class BaseElement:
 
     def hover_over_element(self):
         self.logger.info(f"{self.description}: наведение на элемент")
-        element = self.visibility_located()
+        element = self.get_visibility_located()
         self.action_chains.move_to_element(element).perform()
 
     def scroll_into_view(self):
@@ -46,5 +54,8 @@ class BaseElement:
         self.driver.execute_script("arguments[0].scrollIntoView();", element)
 
     def get_attribute(self, attribute):
-        self.logger.info(f"{self.description}: получение атрибута '{attribute}' у элемента")
-        return self.get_presence_of_element_located().get_attribute(attribute)
+        self.logger.info(f"Getting attribute '{attribute}' for {self.description}")
+        value = self.get_presence_of_element_located().get_attribute(attribute)
+        self.logger.info(f"Attribute value: {value}")
+        return value
+

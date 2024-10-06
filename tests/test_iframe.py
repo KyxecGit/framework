@@ -1,17 +1,17 @@
 from pages.iframe_page import IframePage
 from utils.logger import Logger  
+from utils.config import IFRAME_URL
 
 
 class TestIframeNavigation:
-    URL = "https://demoqa.com/alertsWindows"
     PARENT_TEXT = "Parent frame"
     CHILD_TEXT = "Child Iframe"
+    logger = Logger.setup_logger()
 
 
     def test_iframe_navigation(self, browser):
-        self.logger = Logger.setup_logger(name='test_iframe_navigation')
         self.logger.info("Запуск теста навигации по iframe")
-        browser.get(self.URL)
+        browser.get(IFRAME_URL)
 
         self.iframe_page = IframePage(browser)
         self.iframe_page.wait_for_open()
