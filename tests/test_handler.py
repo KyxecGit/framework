@@ -1,0 +1,45 @@
+from pages.handler_page import HandlerPage
+from utils.logger import Logger  
+from utils.config import HANDLER_URL
+
+
+class TestWindowHandler:
+    NEW_WINDOW_TITLE = "New Window"
+    logger = Logger.setup_logger()
+
+
+    def test_open_new_window(self, browser):
+        self.logger.info("Запуск теста открытия нового окна")
+        browser.get(HANDLER_URL)
+
+        self.handlers_page = HandlerPage(browser)
+        self.handlers_page.wait_for_open()
+
+        main_window = browser.get_current_window_handle()
+        self.logger.info("Главное окно захвачено: %s", main_window)
+
+        self.handlers_page.click_for_new_tab()
+
+        browser.switch_to_the_tab(main_window)
+
+        actual_title = browser.get_title()
+
+        assert actual_title == self.NEW_WINDOW_TITLE, \
+            f"Не удалось открыть страницу {self.NEW_WINDOW_TITLE}"
+
+        browser.switch_to_window(main_window)
+        self.handlers_page.wait_for_open()
+
+        self.handlers_page.click_for_new_tab()
+
+        browser.switch_to_the_tab(main_window)
+
+        actual_title = browser.get_title()
+        assert actual_title == self.NEW_WINDOW_TITLE, \
+            f"Не удалось открыть страницу {self.NEW_WINDOW_TITLE}"
+
+        browser.switch_to_window(main_window)
+        self.handlers_page.wait_for_open()
+
+        browser.close_tab_by_title(self.NEW_WINDOW_TITLE)
+        browser.close_tab_by_title(self.NEW_WINDOW_TITLE)
