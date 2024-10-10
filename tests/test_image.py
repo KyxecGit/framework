@@ -1,3 +1,4 @@
+import os
 import pytest
 from pages.image_page import ImagePage
 from utils.logger import Logger
@@ -8,7 +9,7 @@ class TestUploadImage:
     logger = Logger.setup_logger()
 
 
-    @pytest.mark.parametrize('path, image_name', [("C:\image.jpg", "image.jpg")])
+    @pytest.mark.parametrize('path, image_name', [(os.path.join("images", "image.jpg"), "image.jpg")])
     def test_upload_image(self, browser, path, image_name):
         
         self.logger.info("Запуск теста загрузки изображения")
@@ -23,7 +24,7 @@ class TestUploadImage:
         self.logger.info(f"Ожидаемое имя: {image_name}, фактическое имя: {actual_name}")
         assert actual_name == image_name, "Имя файла не отображается"
 
-    @pytest.mark.parametrize('path, image_name', [("C:\image.jpg", "image.jpg")])
+    @pytest.mark.parametrize('path, image_name', [(os.path.join("images", "image.jpg"), "image.jpg")])
     def test_upload_image_dialog_window(self, browser, path, image_name):
         self.logger.info("Запуск теста загрузки изображения через диалоговое окно")
         browser.get(IMAGE_URL)

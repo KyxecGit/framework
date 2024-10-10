@@ -9,8 +9,8 @@ class HandlerPage(BasePage):
     BUTTON = (By.XPATH, '//div[contains(@class,"example")]//a')
 
     def __init__(self, driver):
-        unique_element = Label(driver, self.UNIQUE_ELEMENT)
-        super().__init__(driver, unique_element)
+        super().__init__(driver)
+        self.unique_element = Label(driver, self.UNIQUE_ELEMENT)
         self.button = Button(driver, self.BUTTON, description="Handlers Page -> Redirection Button")
 
 

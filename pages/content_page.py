@@ -5,23 +5,21 @@ from elements.label import Label
 
 class ContentPage(BasePage):
     UNIQUE_ELEMENT = (By.ID, 'page-footer')
+    IMAGE_TEMPLATE = '(//div[contains(@class, "large-2 columns")]//img)[{}]'
 
     def __init__(self, driver):
-        unique_element = Label(driver, self.UNIQUE_ELEMENT)
-        super().__init__(driver, unique_element)
-
+        super().__init__(driver)
+        self.unique_element = Label(self.driver, self.UNIQUE_ELEMENT)
 
     def get_image_source(self, index):
-        self.logger.info(f"Getting image source for image {index}")
-        image = Element(self.driver, (By.XPATH,f'(//div[contains(@class, "large-2 columns")]/img)[{index}]'),
-                       description=f"Dynamic content Page -> Image_{index}" )
+        self.logger.info(f"Получение источника изображения с индексом {index}")
+        image_locator = (By.XPATH, self.IMAGE_TEMPLATE.format(index))
+        image = Element(self.driver, image_locator, description=f"Dynamic content Page -> Image_{index}")
         source = image.get_attribute('src')
-        self.logger.info(f"Image {index} source: {source}")
         return source
-
 
     def get_images_sources(self):
         self.logger.info("Получение источников всех изображений")
-        sources = [self.get_image_source(1), self.get_image_source(2), self.get_image_source(3)]
+        sources = [self.get_image_source(i) for i in range(1, 4)]  
         self.logger.info(f"Источники изображений: {sources}")
         return sources

@@ -14,8 +14,8 @@ class IframePage(BasePage):
     TEXT_INSIDE_IFRAME = (By.XPATH, '//body[normalize-space(.)="Child Iframe"]')
 
     def __init__(self, driver):
-        unique_element = Label(driver, self.UNIQUE_ELEMENT)
-        super().__init__(driver, unique_element)
+        super().__init__(driver)
+        self.unique_element = Label(driver, self.UNIQUE_ELEMENT)
         self.label = Label(driver, self.NESTED_FRAMES, description="Main Page -> Redirection button")
         self.title = Label(driver, self.NESTED_FRAMES_TITLE, description="Frames Page -> Parent title")
         self.parent_frame = Element(driver, self.PARENT_FRAME, description="Frames Page -> Parent frame")

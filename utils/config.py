@@ -1,5 +1,6 @@
 import logging
 
+CHROME_OPTIONS = "--window-size=1920,1080"
 
 DEFAULT_WAIT_TIME = 10
 

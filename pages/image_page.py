@@ -17,8 +17,8 @@ class ImagePage(BasePage):
     CHECK_MARK_SYMBOL = (By.XPATH, '//*[@id="drag-drop-upload"]/div/div[2]/span')
 
     def __init__(self, driver):
-        unique_element = Label(driver, self.UNIQUE_ELEMENT)
-        super().__init__(driver, unique_element)
+        super().__init__(driver)
+        self.unique_element = Label(driver, self.UNIQUE_ELEMENT)
         self.button = Button(driver, self.UPLOAD_IMG_BUTTON, description="Upload Image Page -> Upload Button")
         self.input = Input(driver, self.IMG_BUTTON, description="Upload Image Page -> Unload Button")
         self.label = Label(driver, self.UPLOADED_FILE_TEXT, description="Upload Image Page -> Uploaded file")
@@ -43,7 +43,6 @@ class ImagePage(BasePage):
         self.send_keys(image)
         self.click_to_submit_image()
 
-    #походу как то криво реализовал но работает
     def upload_image2(self, image):
         self.logger.info("Загрузка изображения через диалоговое окно")
         self.element_1.click()

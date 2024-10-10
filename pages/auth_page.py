@@ -9,8 +9,8 @@ class AuthPage(BasePage):
 
 
     def __init__(self, driver):
-        unique_element = Label(driver, self.UNIQUE_ELEMENT)
-        super().__init__(driver, unique_element)
+        super().__init__(driver)
+        self.unique_element = Label(driver, self.UNIQUE_ELEMENT)
         self.label = Label(driver, self.PAGE_TEXT, description="Authorization Page -> Authorization text")
 
 

@@ -12,8 +12,8 @@ class HoverPage(BasePage):
 
 
     def __init__(self, driver):
-        unique_element = Label(driver, self.UNIQUE_ELEMENT)
-        super().__init__(driver, unique_element)
+        super().__init__(driver)
+        self.unique_element = Label(driver, self.UNIQUE_ELEMENT)
 
 
     def click_profile_label(self, index):
@@ -24,11 +24,14 @@ class HoverPage(BasePage):
 
     def get_caption_text(self, index):
         self.logger.info(f"Получение текста подписи для элемента с индексом {index}")
-        caption_template = (By.XPATH, self.CAPTION_TEMPLATE.format(index))
-        caption = Label(self.driver, caption_template, description="Hovers Page -> Caption Template")
+        
+        caption_locator = (By.XPATH, self.CAPTION_TEMPLATE.format(index))
+        caption = Label(self.driver, caption_locator, description="Hovers Page -> Caption Template")
+        
         caption_text = caption.get_text()
         self.logger.info(f"Текст подписи: {caption_text}")
         return caption_text
+
 
     def hover_over_figure(self, index):
         self.logger.info(f"Наведение на фигуру с индексом {index}")

@@ -12,8 +12,8 @@ class AlertPage(BasePage):
     RESULT = (By.ID, 'result')
 
     def __init__(self, driver):
-        unique_element = Label(driver, self.UNIQUE_ELEMENT)
-        super().__init__(driver, unique_element)
+        super().__init__(driver)
+        self.unique_element = Label(driver, self.UNIQUE_ELEMENT)
         self.button_1 = Button(driver, self.JS_ALERT, description="Alert Page -> JS Alert -> Alert button")
         self.button_2 = Button(driver, self.JS_CONFIRM, description="Alert Page -> JS Confirm -> Confirm button")
         self.button_3 = Button(driver, self.JS_PROMPT, description="Alert Page ->  JS Prompt -> Prompt button")
@@ -34,9 +34,6 @@ class AlertPage(BasePage):
 
     def get_result_text(self):
         self.logger.info("Получение текста результата действия")
-        self.label = Label(self.driver, self.RESULT, description="Alert Page -> Action result")
         result_text = self.label.get_text()
         self.logger.info(f"Текст результата: {result_text}")
         return result_text
-    
-

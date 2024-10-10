@@ -19,12 +19,10 @@ class TestWindowHandler:
         self.logger.info("Главное окно захвачено: %s", main_window)
 
         self.handlers_page.click_for_new_tab()
-        self.logger.info("Кликнули для открытия новой вкладки")
 
         browser.switch_to_the_tab(main_window)
 
         actual_title = browser.get_title()
-        self.logger.info("Фактический заголовок окна: %s", actual_title)
 
         assert actual_title == self.NEW_WINDOW_TITLE, \
             f"Не удалось открыть страницу {self.NEW_WINDOW_TITLE}"
@@ -33,12 +31,10 @@ class TestWindowHandler:
         self.handlers_page.wait_for_open()
 
         self.handlers_page.click_for_new_tab()
-        self.logger.info("Кликнули для открытия новой вкладки")
 
         browser.switch_to_the_tab(main_window)
 
         actual_title = browser.get_title()
-        self.logger.info("Фактический заголовок окна: %s", actual_title)
         assert actual_title == self.NEW_WINDOW_TITLE, \
             f"Не удалось открыть страницу {self.NEW_WINDOW_TITLE}"
 
@@ -46,7 +42,4 @@ class TestWindowHandler:
         self.handlers_page.wait_for_open()
 
         browser.close_tab_by_title(self.NEW_WINDOW_TITLE)
-        self.logger.info("Закрыли вкладку с заголовком: %s", self.NEW_WINDOW_TITLE)
-
         browser.close_tab_by_title(self.NEW_WINDOW_TITLE)
-        self.logger.info("Закрыли вкладку с заголовком: %s", self.NEW_WINDOW_TITLE)

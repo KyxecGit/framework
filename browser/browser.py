@@ -37,19 +37,19 @@ class Browser:
     def get_title(self):
         self.logger.info("Получение заголовка страницы")
         return self._driver.title
-    
+
     def get_current_window_handle(self):
         self.logger.info("Получение идентификатора текущего окна")
         return self._driver.current_window_handle
-    
+
     def get_page_source(self):
         self.logger.info("Получение исходного кода страницы")
         return self._driver.page_source
-    
+
     def execute_script(self, script, *args):
         self.logger.info(f"Выполнение JavaScript: {script} с аргументами {args}")
         return self._driver.execute_script(script, *args)
-    
+
     def switch_to_window(self, window_handle):
         self.logger.info("Переключение на другое окно")
         self._driver.switch_to.window(window_handle)
@@ -57,20 +57,18 @@ class Browser:
     def switch_to_iframe(self, iframe):
         self.logger.info(f"Переключение на iframe: {iframe}")
         self._driver.switch_to.frame(iframe)
-    
+
     def switch_to_the_tab(self, current_window_handle):
         self.logger.info("Ожидание новой вкладки")
         
-        self.wait.until(
-            lambda driver: len(driver.window_handles) > 1
-        )
+        # Используем явное ожидание для новой вкладки
+        self.wait.until(self.new_window_is_opened([current_window_handle]))
 
         for handle in self._driver.window_handles:
             if handle != current_window_handle:
                 self.logger.info(f"Переключение на вкладку: {handle}")
                 self._driver.switch_to.window(handle)
                 break
-
 
     def close_tab_by_title(self, title):
         self.logger.info(f"Закрытие вкладки с заголовком: {title}")
@@ -83,7 +81,7 @@ class Browser:
     def get_alert_text(self):
         self.logger.info("Получение текста алерта")
         return self.wait.until(EC.alert_is_present()).text
-    
+
     def accept_alert(self):
         self.logger.info("Принятие алерта")
         alert = self.wait.until(EC.alert_is_present())
@@ -94,5 +92,7 @@ class Browser:
         alert = self.wait.until(EC.alert_is_present())
         alert.send_keys(value)
 
-    def find_element(self, by, value):
-        return self._driver.find_element(by, value)
+    def new_window_is_opened(self, current_handles):
+        def _predicate(_driver):
+            return len(_driver.window_handles) > len(current_handles)
+        return _predicate
